@@ -25,7 +25,6 @@ export default function ChatDetails() {
   const handleSend = () => {
     if (!newMessage.trim() || !conversation) return;
 
-    // Bizning xabarimiz
     const newMsg: ChatMessage = {
       id: Date.now().toString(),
       message: newMessage,
@@ -38,7 +37,6 @@ export default function ChatDetails() {
     setMessages((prev) => [...prev, newMsg]);
     setNewMessage("");
 
-    // Fermerdan sun'iy avtomatik javob kelishi
     setTimeout(() => {
       const replies = [
         "Xo'p bo'ladi, tushundim.",
@@ -62,8 +60,6 @@ export default function ChatDetails() {
 
   return (
     <div className="fixed inset-0 z-[100] bg-[#f1f4ee] flex flex-col animate-fadeIn">
-      
-      {/* Tepa qism (Header) */}
       <header className="bg-white/95 backdrop-blur-xl px-3 py-3 flex items-center gap-3 border-b border-black/[0.03] shrink-0 shadow-sm">
         <button onClick={() => navigate(-1)} className="p-2.5 bg-[#f8f9f5] rounded-full active:scale-95 transition-transform text-[#2d3429]">
           <ArrowLeft className="w-5 h-5" />
@@ -82,7 +78,6 @@ export default function ChatDetails() {
         <button className="p-2 text-[#6b7a62] hover:bg-gray-100 rounded-full"><MoreVertical className="w-5 h-5" /></button>
       </header>
 
-      {/* Xabarlar maydoni */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg, index) => {
           const isMe = msg.senderId === "buyer";
@@ -104,7 +99,6 @@ export default function ChatDetails() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Xabar yozish maydoni */}
       <div className="p-3 bg-white/95 backdrop-blur-xl border-t border-black/[0.03] shrink-0 pb-6">
         <div className="flex items-center gap-2 bg-[#f8f9f5] p-1.5 rounded-full shadow-inner border border-black/[0.02]">
           <input
@@ -124,7 +118,6 @@ export default function ChatDetails() {
           </button>
         </div>
       </div>
-      
     </div>
   );
 }
