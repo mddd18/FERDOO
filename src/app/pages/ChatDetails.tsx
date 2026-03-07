@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { conversations, generateReply } from "../data/chatData";
+import { conversations, ChatMessage } from "../data/chatData";
 import { ArrowLeft, Send, Phone, MoreVertical } from "lucide-react";
 
 export default function ChatDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -16,7 +16,7 @@ export default function ChatDetails() {
     if (conversation) {
       setMessages(conversation.messages);
     }
-  }, [id]);
+  }, [id, conversation]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -25,28 +25,42 @@ export default function ChatDetails() {
   const handleSend = () => {
     if (!newMessage.trim() || !conversation) return;
 
-    const newMsg = {
+    // Bizning xabarimiz
+    const newMsg: ChatMessage = {
       id: Date.now().toString(),
-      text: newMessage,
-      sender: "me",
+      message: newMessage,
+      senderId: "buyer",
+      senderName: "Siz",
       timestamp: new Date().toISOString(),
       isRead: true,
     };
 
-    setMessages([...messages, newMsg]);
+    setMessages((prev) => [...prev, newMsg]);
     setNewMessage("");
 
-    // Sun'iy intellekt / bot javobi simulyatsiyasi
+    // Fermerdan sun'iy avtomatik javob kelishi
     setTimeout(() => {
-      const reply = generateReply(conversation.farmerName);
-      setMessages((prev) => [...prev, reply]);
-    }, 1000);
+      const replies = [
+        "Xo'p bo'ladi, tushundim.",
+        "Albatta, gap yo'q!",
+        "Rahmat, buyurtmangizni tayyorlayman.",
+        "Yana qanday savollaringiz bor?"
+      ];
+      const replyMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        message: replies[Math.floor(Math.random() * replies.length)],
+        senderId: conversation.farmerId,
+        senderName: conversation.farmerName,
+        timestamp: new Date().toISOString(),
+        isRead: true,
+      };
+      setMessages((prev) => [...prev, replyMsg]);
+    }, 1200);
   };
 
   if (!conversation) return <div className="p-4">Chat topilmadi</div>;
 
   return (
-    // z-[100] pastki menyuni yopib, ekranni to'liq egallash uchun
     <div className="fixed inset-0 z-[100] bg-[#f1f4ee] flex flex-col animate-fadeIn">
       
       {/* Tepa qism (Header) */}
@@ -57,13 +71,11 @@ export default function ChatDetails() {
         <div className="flex-1 flex items-center gap-3 cursor-pointer">
           <div className="relative">
             <img src={conversation.farmerAvatar} alt="" className="w-11 h-11 rounded-full object-cover border border-gray-100" />
-            {conversation.isOnline && <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />}
+            <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
           </div>
           <div>
             <h2 className="font-bold text-[#2d3429] leading-tight">{conversation.farmerName}</h2>
-            <p className="text-[11px] font-bold text-[#4a6d3a]">
-              {conversation.isOnline ? 'Onlayn' : 'Yaqinda kirdi'}
-            </p>
+            <p className="text-[11px] font-bold text-[#4a6d3a]">Onlayn</p>
           </div>
         </div>
         <button className="p-2 text-[#4a6d3a] hover:bg-gray-100 rounded-full"><Phone className="w-5 h-5" /></button>
@@ -73,7 +85,7 @@ export default function ChatDetails() {
       {/* Xabarlar maydoni */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg, index) => {
-          const isMe = msg.sender === "me";
+          const isMe = msg.senderId === "buyer";
           return (
             <div key={msg.id || index} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[75%] px-5 py-3.5 shadow-sm ${
@@ -81,7 +93,7 @@ export default function ChatDetails() {
                   ? 'bg-[#4a6d3a] text-white rounded-t-[1.5rem] rounded-bl-[1.5rem] rounded-br-[0.4rem]' 
                   : 'bg-white text-[#2d3429] rounded-t-[1.5rem] rounded-br-[1.5rem] rounded-bl-[0.4rem] border border-black/[0.03]'
               }`}>
-                <p className="text-[14px] font-medium leading-relaxed">{msg.text}</p>
+                <p className="text-[14px] font-medium leading-relaxed">{msg.message}</p>
                 <span className={`text-[10px] font-bold mt-1.5 block text-right ${isMe ? 'text-white/70' : 'text-[#a3b19b]'}`}>
                   {new Date(msg.timestamp).toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' })}
                 </span>
@@ -99,7 +111,7 @@ export default function ChatDetails() {
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Xabar yozing..."
             className="flex-1 bg-transparent px-5 py-3 font-semibold text-sm focus:outline-none text-[#2d3429] placeholder:text-[#a3b19b]"
           />
