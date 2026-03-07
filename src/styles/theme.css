@@ -42,7 +42,7 @@
   --ring: #4a6d3a;
 }
 
-/* Dark mode (Pastel uslubda dark mode) */
+/* Dark mode */
 .dark {
   --background: #1a2018;
   --foreground: #e4e9de;
@@ -68,15 +68,47 @@
 }
 
 @layer base {
+  :root {
+    /* Tugma bosilganda chiqadigan ko'k fonni yo'q qilish */
+    -webkit-tap-highlight-color: transparent;
+  }
+
   * {
     @apply border-border transition-all duration-300;
+    /* Skroll barlarni yashirish */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    /* Fon uchun rasmga mos xira effekt qo'shish */
+    @apply text-foreground;
+    background-color: #e5e7eb; /* Kompyuterda ochilsa cheti kulrang bo'ladi */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    /* Mobil ilovalardagi kabi matnni belgilashni va tortganda yangilanishni taqiqlash */
+    overscroll-behavior-y: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Asosiy ilova qutisi (Mobil simulyatsiya va Yashil fon effekti shu yerda) */
+  #root {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 430px;
+    min-height: 100dvh;
+    background-color: var(--background);
     background-image: radial-gradient(circle at 10% 20%, rgba(220, 231, 211, 0.5) 0%, transparent 40%),
                       radial-gradient(circle at 90% 80%, rgba(226, 240, 217, 0.5) 0%, transparent 40%);
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow-x: hidden;
   }
 
   /* Rasmga mos Card dizayni uchun global stil */
@@ -91,5 +123,24 @@
 
   h1, h2, h3 {
     @apply tracking-tight text-[#2d5a27] font-bold;
+  }
+
+  /* Custom animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.3s ease-out;
   }
 }
