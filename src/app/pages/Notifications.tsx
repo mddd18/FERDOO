@@ -1,161 +1,73 @@
 import { useNavigate } from "react-router";
+import { ArrowLeft, Bell, Package, CheckCircle2, MessageSquare } from "lucide-react";
 import { notifications } from "../data/chatData";
-import { Bell, Package, MessageCircle, Star, ShoppingBag, ArrowLeft } from "lucide-react";
-import { Button } from "../components/ui/button";
 
 export default function Notifications() {
   const navigate = useNavigate();
 
-  const getNotificationIcon = (type: string) => {
-    switch (type) {
-      case 'order':
-        return <Package className="w-5 h-5 text-green-600" />;
-      case 'message':
-        return <MessageCircle className="w-5 h-5 text-blue-600" />;
-      case 'review':
-        return <Star className="w-5 h-5 text-yellow-600" />;
-      case 'new_product':
-        return <ShoppingBag className="w-5 h-5 text-purple-600" />;
-      default:
-        return <Bell className="w-5 h-5 text-gray-600" />;
+  // Ikonka turini tanlash
+  const getIcon = (type: string) => {
+    switch(type) {
+      case 'order_status': return <Package className="w-5 h-5 text-blue-500" />;
+      case 'system': return <Bell className="w-5 h-5 text-yellow-500" />;
+      case 'message': return <MessageSquare className="w-5 h-5 text-green-500" />;
+      default: return <Bell className="w-5 h-5 text-[#4a6d3a]" />;
     }
   };
-
-  const getNotificationColor = (type: string, isRead: boolean) => {
-    if (isRead) return 'bg-white border-gray-200';
-    
-    switch (type) {
-      case 'order':
-        return 'bg-green-50 border-green-300';
-      case 'message':
-        return 'bg-blue-50 border-blue-300';
-      case 'review':
-        return 'bg-yellow-50 border-yellow-300';
-      case 'new_product':
-        return 'bg-purple-50 border-purple-300';
-      default:
-        return 'bg-gray-50 border-gray-300';
-    }
-  };
-
-  const handleNotificationClick = (notification: typeof notifications[0]) => {
-    // Navigate based on notification type
-    switch (notification.type) {
-      case 'message':
-        if (notification.relatedId) {
-          const conv = notification.relatedId;
-          // Extract farmer ID from conversation ID
-          navigate('/chat');
-        }
-        break;
-      case 'order':
-        navigate('/orders');
-        break;
-      case 'new_product':
-        if (notification.relatedId) {
-          navigate(`/farmer/${notification.relatedId}`);
-        }
-        break;
-      case 'review':
-        navigate('/orders');
-        break;
-    }
-  };
-
-  const formatTime = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(hours / 24);
-
-    if (hours < 1) {
-      const minutes = Math.floor(diff / (1000 * 60));
-      return `${minutes} daqiqa oldin`;
-    } else if (hours < 24) {
-      return `${hours} soat oldin`;
-    } else if (days === 1) {
-      return 'Kecha';
-    } else if (days < 7) {
-      return `${days} kun oldin`;
-    } else {
-      return date.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'short' });
-    }
-  };
-
-  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   return (
-    <div className="pb-4">
+    <div className="min-h-screen bg-[#f1f4ee] pb-20 animate-fadeIn">
+      
       {/* Header */}
-      <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between z-10">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-full">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div>
-            <h2 className="font-semibold text-lg">Bildirishnomalar</h2>
-            {unreadCount > 0 && (
-              <p className="text-xs text-gray-500">{unreadCount} ta o'qilmagan</p>
-            )}
-          </div>
-        </div>
-        {unreadCount > 0 && (
-          <Button variant="ghost" size="sm" className="text-green-600">
-            Hammasini o'qilgan qilish
-          </Button>
-        )}
-      </div>
+      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-black/[0.05] px-4 py-4 flex items-center gap-4">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="p-2 bg-[#f8f9f5] rounded-full active:scale-95 transition-transform text-[#2d3429]"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <h1 className="text-xl font-bold text-[#2d3429]">Bildirishnomalar</h1>
+      </header>
 
-      {/* Notifications List */}
+      {/* Kontent */}
       <div className="p-4 space-y-3">
-        {notifications.length > 0 ? (
+        {notifications.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-[#6b7a62]">
+            <Bell className="w-16 h-16 text-[#dce7d3] mb-4" />
+            <p className="font-medium">Hozircha xabarlar yo'q</p>
+          </div>
+        ) : (
           notifications.map((notification) => (
-            <div
-              key={notification.id}
-              onClick={() => handleNotificationClick(notification)}
-              className={`border rounded-lg p-4 cursor-pointer hover:shadow-md transition-all ${getNotificationColor(
-                notification.type,
-                notification.isRead
-              )}`}
+            <div 
+              key={notification.id} 
+              className={`p-4 rounded-[1.5rem] flex gap-4 transition-all ${
+                notification.isRead ? 'bg-white shadow-sm' : 'bg-[#e2f0d9]/50 border border-[#4a6d3a]/20 shadow-sm'
+              }`}
             >
-              <div className="flex items-start gap-3">
-                {/* Icon */}
-                <div className={`p-2 rounded-full ${
-                  notification.isRead ? 'bg-gray-100' : 'bg-white'
-                }`}>
-                  {getNotificationIcon(notification.type)}
+              <div className="mt-1">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  {getIcon(notification.type)}
                 </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between mb-1">
-                    <h3 className={`font-semibold text-sm ${
-                      notification.isRead ? 'text-gray-700' : 'text-gray-900'
-                    }`}>
-                      {notification.title}
-                    </h3>
-                    {!notification.isRead && (
-                      <div className="w-2 h-2 bg-green-600 rounded-full ml-2 mt-1.5 flex-shrink-0" />
-                    )}
-                  </div>
-                  <p className={`text-sm mb-2 ${
-                    notification.isRead ? 'text-gray-600' : 'text-gray-800'
-                  }`}>
-                    {notification.message}
-                  </p>
-                  <span className="text-xs text-gray-500">
-                    {formatTime(notification.timestamp)}
-                  </span>
+              </div>
+              <div className="flex-1">
+                <div className="flex justify-between items-start mb-1">
+                  <h4 className={`text-sm ${notification.isRead ? 'font-semibold text-[#2d3429]' : 'font-bold text-[#4a6d3a]'}`}>
+                    {notification.title}
+                  </h4>
+                  {!notification.isRead && (
+                    <span className="w-2 h-2 bg-red-500 rounded-full mt-1.5" />
+                  )}
+                </div>
+                <p className="text-xs text-[#6b7a62] leading-relaxed mb-2">
+                  {notification.message}
+                </p>
+                <div className="flex items-center gap-1 text-[10px] font-semibold text-[#a3b19b]">
+                  <CheckCircle2 className="w-3 h-3" />
+                  {new Date(notification.timestamp).toLocaleString('uz-UZ', { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' })}
                 </div>
               </div>
             </div>
           ))
-        ) : (
-          <div className="text-center py-16">
-            <Bell className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">Bildirishnomalar yo'q</p>
-          </div>
         )}
       </div>
     </div>
