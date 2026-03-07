@@ -18,7 +18,6 @@ export default function Auth() {
     e.preventDefault();
     
     if (isLogin) {
-      // Login logic
       if (formData.phone && formData.password) {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userName", formData.name || "Do'kon egasi");
@@ -26,7 +25,6 @@ export default function Auth() {
         navigate("/");
       }
     } else {
-      // Register logic
       if (formData.name && formData.phone && formData.password && formData.shopName) {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userName", formData.name);
@@ -37,121 +35,121 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo and Title */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl mb-4 shadow-lg">
-            <Leaf className="w-10 h-10 text-white" />
+    <div className="min-h-screen bg-[#f1f4ee] relative flex items-center justify-center p-4 overflow-hidden">
+      
+      {/* Orqa fondagi dekorativ "blur" dog'lar */}
+      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#dce7d3] rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-[#e2f0d9] rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+
+      <div className="w-full max-w-md relative z-10 animate-fadeIn">
+        
+        {/* Logo va Sarlavha */}
+        <div className="text-center mb-10">
+          <div className="mx-auto w-24 h-24 bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-center mb-6">
+            <div className="w-20 h-20 bg-[#e2f0d9] rounded-full flex items-center justify-center">
+              <Leaf className="w-10 h-10 text-[#4a6d3a]" />
+            </div>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">FERDO</h1>
-          <p className="text-gray-600">Do'kon egalari uchun platforma</p>
-          <p className="text-sm text-gray-500 mt-2">Fermerlardan to'g'ridan-to'g'ri xarid qiling</p>
+          <h1 className="text-4xl font-black text-[#2d3429] mb-2 tracking-tight">FERDO</h1>
+          <p className="text-[#6b7a62] font-semibold">Do'kon egalari uchun platforma</p>
         </div>
 
-        {/* Auth Card */}
-        <div className="bg-white rounded-3xl shadow-2xl p-8">
-          {/* Toggle Login/Register */}
-          <div className="flex gap-2 mb-6 p-1 bg-gray-100 rounded-2xl">
+        {/* Asosiy Forma Kartasi (Glassmorphism) */}
+        <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-8 border border-white/50">
+          
+          {/* Tab tugmalari (Login / Register) */}
+          <div className="flex bg-[#f8f9f5] p-1.5 rounded-full mb-8 shadow-inner">
             <button
               onClick={() => setIsLogin(true)}
-              className={`flex-1 py-3 rounded-xl font-semibold transition-all ${
+              className={`flex-1 py-3.5 rounded-full font-bold transition-all duration-300 ${
                 isLogin
-                  ? "bg-green-600 text-white shadow-md"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-[#4a6d3a] text-white shadow-md scale-100"
+                  : "text-[#6b7a62] hover:text-[#2d3429]"
               }`}
             >
               Kirish
             </button>
             <button
               onClick={() => setIsLogin(false)}
-              className={`flex-1 py-3 rounded-xl font-semibold transition-all ${
+              className={`flex-1 py-3.5 rounded-full font-bold transition-all duration-300 ${
                 !isLogin
-                  ? "bg-green-600 text-white shadow-md"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-[#4a6d3a] text-white shadow-md scale-100"
+                  : "text-[#6b7a62] hover:text-[#2d3429]"
               }`}
             >
               Ro'yxatdan o'tish
             </button>
           </div>
 
-          {/* User Type Badge */}
-          <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-2xl border-2 border-green-200">
-            <div className="flex items-center justify-center gap-3">
-              <Store className="w-6 h-6 text-green-600" />
-              <p className="text-lg font-bold text-green-700">Do'kon egasi</p>
-            </div>
-          </div>
-
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Ism Familiya
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    type="text"
-                    placeholder="Ismingizni kiriting"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="pl-10"
-                    required={!isLogin}
-                  />
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-bold text-[#6b7a62] mb-2 block ml-2">
+                    Ism Familiya
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#6b7a62]" />
+                    <Input
+                      type="text"
+                      placeholder="Ismingizni kiriting"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full bg-[#f8f9f5] border-none rounded-full h-14 pl-12 pr-4 text-[#2d3429] font-bold focus-visible:ring-2 focus-visible:ring-[#4a6d3a]/20 shadow-inner placeholder:font-medium"
+                      required={!isLogin}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
 
-            {!isLogin && (
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Do'kon nomi
-                </label>
-                <div className="relative">
-                  <Store className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    type="text"
-                    placeholder="Do'koningiz nomini kiriting"
-                    value={formData.shopName}
-                    onChange={(e) => setFormData({ ...formData, shopName: e.target.value })}
-                    className="pl-10"
-                    required={!isLogin}
-                  />
+                <div>
+                  <label className="text-sm font-bold text-[#6b7a62] mb-2 block ml-2">
+                    Do'kon nomi
+                  </label>
+                  <div className="relative">
+                    <Store className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#6b7a62]" />
+                    <Input
+                      type="text"
+                      placeholder="Do'kon nomini kiriting"
+                      value={formData.shopName}
+                      onChange={(e) => setFormData({ ...formData, shopName: e.target.value })}
+                      className="w-full bg-[#f8f9f5] border-none rounded-full h-14 pl-12 pr-4 text-[#2d3429] font-bold focus-visible:ring-2 focus-visible:ring-[#4a6d3a]/20 shadow-inner placeholder:font-medium"
+                      required={!isLogin}
+                    />
+                  </div>
                 </div>
               </div>
             )}
 
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">
+              <label className="text-sm font-bold text-[#6b7a62] mb-2 block ml-2">
                 Telefon raqam
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#6b7a62]" />
                 <Input
                   type="tel"
                   placeholder="+998 90 123 45 67"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="pl-10"
+                  className="w-full bg-[#f8f9f5] border-none rounded-full h-14 pl-12 pr-4 text-[#2d3429] font-bold focus-visible:ring-2 focus-visible:ring-[#4a6d3a]/20 shadow-inner placeholder:font-medium"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">
+              <label className="text-sm font-bold text-[#6b7a62] mb-2 block ml-2">
                 Parol
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#6b7a62]" />
                 <Input
                   type="password"
                   placeholder="Parolingizni kiriting"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="pl-10"
+                  className="w-full bg-[#f8f9f5] border-none rounded-full h-14 pl-12 pr-4 text-[#2d3429] font-bold focus-visible:ring-2 focus-visible:ring-[#4a6d3a]/20 shadow-inner placeholder:font-medium"
                   required
                 />
               </div>
@@ -159,48 +157,29 @@ export default function Auth() {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-6 text-lg font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all"
+              className="w-full bg-[#4a6d3a] hover:bg-[#3d5a30] text-white h-14 text-lg font-black rounded-full shadow-[0_10px_20px_rgba(74,109,58,0.2)] active:scale-95 transition-all mt-6"
             >
-              {isLogin ? "Kirish" : "Ro'yxatdan o'tish"}
+              {isLogin ? "Tizimga kirish" : "Ro'yxatdan o'tish"}
             </Button>
           </form>
+        </div>
 
-          {/* Additional Info */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">
-              {isLogin ? "Akkauntingiz yo'qmi? " : "Akkauntingiz bormi? "}
-              <button
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-green-600 font-semibold hover:text-green-700"
-              >
-                {isLogin ? "Ro'yxatdan o'ting" : "Kirish"}
-              </button>
-            </p>
+        {/* Afzalliklar Kartalari */}
+        <div className="mt-6 grid grid-cols-3 gap-3">
+          <div className="bg-white/60 backdrop-blur-md p-4 rounded-[2rem] shadow-sm flex flex-col items-center justify-center border border-white/40">
+            <div className="text-2xl mb-1 drop-shadow-sm">🌾</div>
+            <p className="text-[10px] text-[#4a6d3a] font-black uppercase tracking-wider text-center">Yangi</p>
+          </div>
+          <div className="bg-white/60 backdrop-blur-md p-4 rounded-[2rem] shadow-sm flex flex-col items-center justify-center border border-white/40">
+            <div className="text-2xl mb-1 drop-shadow-sm">💰</div>
+            <p className="text-[10px] text-[#4a6d3a] font-black uppercase tracking-wider text-center">Arzon</p>
+          </div>
+          <div className="bg-white/60 backdrop-blur-md p-4 rounded-[2rem] shadow-sm flex flex-col items-center justify-center border border-white/40">
+            <div className="text-2xl mb-1 drop-shadow-sm">🚚</div>
+            <p className="text-[10px] text-[#4a6d3a] font-black uppercase tracking-wider text-center">Tez</p>
           </div>
         </div>
 
-        {/* Features */}
-        <div className="mt-8 grid grid-cols-3 gap-4 text-center">
-          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-md">
-            <div className="text-2xl mb-2">🌾</div>
-            <p className="text-xs text-gray-600 font-medium">Yangi mahsulotlar</p>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-md">
-            <div className="text-2xl mb-2">💰</div>
-            <p className="text-xs text-gray-600 font-medium">20-30% tejash</p>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-md">
-            <div className="text-2xl mb-2">🚚</div>
-            <p className="text-xs text-gray-600 font-medium">Tez yetkazish</p>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-gray-500">
-            Fermerlar uchun alohida platforma tez orada
-          </p>
-        </div>
       </div>
     </div>
   );
