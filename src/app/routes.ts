@@ -8,6 +8,7 @@ import Chat from "./pages/Chat";
 import ChatDetails from "./pages/ChatDetails";
 import Notifications from "./pages/Notifications";
 import Auth from "./pages/Auth";
+import AIAgent from "./pages/AIAgent"; // <-- Yangi import
 
 export const router = createBrowserRouter([
   {
@@ -23,8 +24,9 @@ export const router = createBrowserRouter([
       { path: "farmer/:id", Component: FarmerProfile },
       { path: "orders", Component: OrderHistory },
       { path: "chat", Component: Chat },
-      { path: "chat/:id", Component: ChatDetails }, // <-- MANA SHU YER O'ZGARDI
+      { path: "chat/:id", Component: ChatDetails },
       { path: "notifications", Component: Notifications },
+      { path: "ai-agent", Component: AIAgent }, // <-- Yangi marshrut
     ],
   },
 ]);
