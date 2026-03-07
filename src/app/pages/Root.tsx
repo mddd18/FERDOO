@@ -1,114 +1,58 @@
-import { useNavigate } from "react-router";
-import { Star, Package, TrendingUp, ShoppingCart } from "lucide-react";
-import { Product } from "../data/mockData";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { useState } from "react";
-import OrderModal from "./OrderModal";
+import { Outlet, useLocation, useNavigate } from "react-router";
+import { Home, ShoppingBag, MessageCircle, Bell } from "lucide-react";
+import { notifications, conversations } from "../data/chatData";
+import { useEffect } from "react";
 
-interface ProductCardProps {
-  product: Product;
-}
-
-export default function ProductCard({ product }: ProductCardProps) {
+export default function Root() {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [showOrderModal, setShowOrderModal] = useState(false);
-  const availableQuantity = product.quantity - product.sold;
-  const soldPercentage = (product.sold / product.quantity) * 100;
 
-  const handleOrder = (quantity: number) => {
-    alert(`Buyurtma qabul qilindi!\n\nMahsulot: ${product.name}\nMiqdor: ${quantity} ${product.unit}\nJami: ${(quantity * product.pricePerUnit).toLocaleString()} so'm\n\nFermer: ${product.farmerName}`);
-  };
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (!isLoggedIn) navigate("/auth");
+  }, [navigate]);
+
+  const unreadNotifications = notifications.filter(n => !n.isRead).length;
+  const unreadMessages = conversations.reduce((sum, conv) => sum + conv.unreadCount, 0);
+
+  const navItems = [
+    { path: "/", icon: Home, label: "Bosh sahifa" },
+    { path: "/chat", icon: MessageCircle, label: "Xabarlar", badge: unreadMessages },
+    { path: "/orders", icon: ShoppingBag, label: "Buyurtmalar" },
+  ];
 
   return (
-    <>
-      {/* Kartochka: Border olib tashlandi, shadow yumshoq qilindi va radius oshirildi */}
-      <div className="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden hover:shadow-lg transition-all duration-300 mb-6">
-        {/* Product Image: Balandligi biroz kamaytirildi va rasm burchaklari kartaga moslandi */}
-        <div
-          onClick={() => navigate(`/product/${product.id}`)}
-          className="relative h-52 bg-[#f8f9f5] cursor-pointer p-2"
-        >
-          <ImageWithFallback
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover rounded-[1.5rem]"
-          />
-          {/* Badge-lar: Glassmorphism uslubida */}
-          <div className="absolute top-5 right-5">
-            <span
-              className={`px-4 py-1.5 rounded-full text-[10px] font-bold shadow-sm backdrop-blur-md ${
-                product.category === 'oliy'
-                  ? 'bg-yellow-400/90 text-white'
-                  : 'bg-blue-400/90 text-white'
-              }`}
-            >
-              {product.category === 'oliy' ? '⭐ OLIY' : 'ODDIY'}
-            </span>
+    <div className="min-h-screen bg-background pb-32">
+      <header className="bg-transparent p-6 sticky top-0 z-10">
+        <div className="max-w-md mx-auto flex items-center justify-between">
+          <div className="bg-white/80 backdrop-blur-md px-5 py-2 rounded-2xl shadow-sm">
+            <h1 className="text-xl font-black text-[#2d5a27]">FERDO</h1>
           </div>
-        </div>
-
-        {/* Product Info */}
-        <div className="p-6 pt-2">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h3
-                onClick={() => navigate(`/product/${product.id}`)}
-                className="text-xl font-extrabold text-[#2d3429] cursor-pointer hover:text-[#4a6d3a] transition-colors"
-              >
-                {product.name}
-              </h3>
-              <p 
-                onClick={() => navigate(`/farmer/${product.farmerId}`)}
-                className="text-sm text-[#6b7a62] font-medium cursor-pointer"
-              >
-                {product.farmerName}
-              </p>
-            </div>
-            {/* Narx rasmga mos pastel yashil fonda */}
-            <div className="bg-[#e2f0d9] px-4 py-2 rounded-2xl">
-              <span className="text-lg font-black text-[#2d5a27]">
-                {product.pricePerUnit.toLocaleString()}
-              </span>
-              <span className="text-[10px] text-[#2d5a27] ml-1 uppercase font-bold">
-                {product.unit}
-              </span>
-            </div>
-          </div>
-
-          {/* Reyting va Sotuv ma'lumoti */}
-          <div className="flex items-center gap-4 mb-5">
-            <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
-              <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-              <span className="text-xs font-bold text-[#2d3429]">{product.farmerRating}</span>
-            </div>
-            <div className="flex items-center gap-1 text-[#6b7a62]">
-              <TrendingUp className="w-3 h-3" />
-              <span className="text-xs font-medium">{product.sold} sotildi</span>
-            </div>
-          </div>
-
-          {/* Sotib olish tugmasi: To'liq yumaloq (Pill shape) */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowOrderModal(true);
-            }}
-            className="w-full py-4 bg-[#4a6d3a] hover:bg-[#3d5a30] text-white rounded-full font-bold flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-md shadow-green-900/10"
-          >
-            <ShoppingCart className="w-5 h-5" />
-            <span>Sotib olish</span>
+          <button onClick={() => navigate('/notifications')} className="relative p-3 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm">
+            <Bell className="w-6 h-6 text-[#2d5a27]" />
+            {unreadNotifications > 0 && <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-[10px] text-white font-bold">{unreadNotifications}</span>}
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Order Modal */}
-      {showOrderModal && (
-        <OrderModal
-          product={product}
-          onClose={() => setShowOrderModal(false)}
-          onOrder={handleOrder}
-        />
-      )}
-    </>
+      <main className="max-w-md mx-auto px-4"><Outlet /></main>
+
+      <nav className="fixed bottom-8 left-6 right-6 bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-none max-w-md mx-auto">
+        <div className="flex justify-around items-center p-2">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.path;
+            return (
+              <button key={item.path} onClick={() => navigate(item.path)} className={`relative flex flex-col items-center gap-1 p-4 rounded-full transition-all ${isActive ? "bg-[#d0e7d2] text-[#2d5a27]" : "text-gray-400"}`}>
+                <div className="relative">
+                  <Icon className={`w-6 h-6 ${isActive ? 'scale-110' : ''}`} />
+                  {item.badge && item.badge > 0 && <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">{item.badge}</span>}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+    </div>
   );
 }
