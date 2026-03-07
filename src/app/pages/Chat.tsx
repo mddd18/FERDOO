@@ -34,21 +34,19 @@ export default function Chat() {
             >
               <div className="relative shrink-0">
                 <img src={conv.farmerAvatar} alt={conv.farmerName} className="w-14 h-14 rounded-full object-cover border-2 border-[#f1f4ee]" />
-                {conv.isOnline && (
-                  <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
-                )}
+                <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
               </div>
               
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-center mb-1">
                   <h3 className="font-bold text-[#2d3429] truncate text-base">{conv.farmerName}</h3>
                   <span className="text-[10px] font-bold text-[#a3b19b]">
-                    {new Date(conv.lastMessage.timestamp).toLocaleTimeString('uz-UZ', {hour: '2-digit', minute:'2-digit'})}
+                    {new Date(conv.lastMessageTime).toLocaleTimeString('uz-UZ', {hour: '2-digit', minute:'2-digit'})}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <p className={`text-sm truncate pr-2 ${conv.unreadCount > 0 ? 'text-[#2d3429] font-bold' : 'text-[#6b7a62] font-medium'}`}>
-                    {conv.lastMessage.text}
+                    {conv.lastMessage}
                   </p>
                   {conv.unreadCount > 0 ? (
                     <span className="w-5 h-5 bg-[#4a6d3a] text-white text-[10px] font-bold flex items-center justify-center rounded-full shadow-sm shrink-0">
