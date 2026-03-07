@@ -16,117 +16,88 @@ export default function ProductCard({ product }: ProductCardProps) {
   const soldPercentage = (product.sold / product.quantity) * 100;
 
   const handleOrder = (quantity: number) => {
-    // In real app, this would make an API call
     alert(`Buyurtma qabul qilindi!\n\nMahsulot: ${product.name}\nMiqdor: ${quantity} ${product.unit}\nJami: ${(quantity * product.pricePerUnit).toLocaleString()} so'm\n\nFermer: ${product.farmerName}`);
   };
 
   return (
     <>
-      <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
-        {/* Product Image */}
+      {/* Kartochka: Border olib tashlandi, shadow yumshoq qilindi va radius oshirildi */}
+      <div className="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden hover:shadow-lg transition-all duration-300 mb-6">
+        {/* Product Image: Balandligi biroz kamaytirildi va rasm burchaklari kartaga moslandi */}
         <div
           onClick={() => navigate(`/product/${product.id}`)}
-          className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 cursor-pointer"
+          className="relative h-52 bg-[#f8f9f5] cursor-pointer p-2"
         >
           <ImageWithFallback
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover rounded-[1.5rem]"
           />
-          {/* Category Badge */}
-          <div className="absolute top-3 right-3">
+          {/* Badge-lar: Glassmorphism uslubida */}
+          <div className="absolute top-5 right-5">
             <span
-              className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-lg backdrop-blur-sm ${
+              className={`px-4 py-1.5 rounded-full text-[10px] font-bold shadow-sm backdrop-blur-md ${
                 product.category === 'oliy'
-                  ? 'bg-yellow-500 text-white'
-                  : 'bg-blue-500 text-white'
+                  ? 'bg-yellow-400/90 text-white'
+                  : 'bg-blue-400/90 text-white'
               }`}
             >
-              {product.category === 'oliy' ? '⭐ Oliy' : 'Oddiy'}
-            </span>
-          </div>
-          {/* Type Badge */}
-          <div className="absolute top-3 left-3">
-            <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-white/90 backdrop-blur-sm text-gray-700 shadow-md">
-              {product.type}
+              {product.category === 'oliy' ? '⭐ OLIY' : 'ODDIY'}
             </span>
           </div>
         </div>
 
         {/* Product Info */}
-        <div className="p-4">
-          {/* Product Name - Single Line */}
-          <h3
-            onClick={() => navigate(`/product/${product.id}`)}
-            className="text-xl font-bold text-gray-900 mb-3 truncate cursor-pointer hover:text-green-600 transition-colors"
-          >
-            {product.name}
-          </h3>
-
-          {/* Farmer Info */}
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/farmer/${product.farmerId}`);
-            }}
-            className="flex items-center gap-2 mb-4 p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-green-50 hover:to-green-100 transition-colors cursor-pointer"
-          >
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-gray-900">
+        <div className="p-6 pt-2">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h3
+                onClick={() => navigate(`/product/${product.id}`)}
+                className="text-xl font-extrabold text-[#2d3429] cursor-pointer hover:text-[#4a6d3a] transition-colors"
+              >
+                {product.name}
+              </h3>
+              <p 
+                onClick={() => navigate(`/farmer/${product.farmerId}`)}
+                className="text-sm text-[#6b7a62] font-medium cursor-pointer"
+              >
                 {product.farmerName}
               </p>
-              <div className="flex items-center gap-1.5">
-                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                <span className="text-sm font-medium text-gray-700">{product.farmerRating}</span>
-                <span className="text-xs text-gray-500">fermer</span>
-              </div>
+            </div>
+            {/* Narx rasmga mos pastel yashil fonda */}
+            <div className="bg-[#e2f0d9] px-4 py-2 rounded-2xl">
+              <span className="text-lg font-black text-[#2d5a27]">
+                {product.pricePerUnit.toLocaleString()}
+              </span>
+              <span className="text-[10px] text-[#2d5a27] ml-1 uppercase font-bold">
+                {product.unit}
+              </span>
             </div>
           </div>
 
-          {/* Quantity Info */}
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Package className="w-4 h-4 text-green-600" />
-                <span className="text-sm font-medium text-gray-700">
-                  {availableQuantity} {product.unit} mavjud
-                </span>
-              </div>
-              <div className="flex items-center gap-1 text-xs text-gray-500">
-                <TrendingUp className="w-3 h-3" />
-                <span>{product.sold} sotildi</span>
-              </div>
+          {/* Reyting va Sotuv ma'lumoti */}
+          <div className="flex items-center gap-4 mb-5">
+            <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
+              <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+              <span className="text-xs font-bold text-[#2d3429]">{product.farmerRating}</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-500"
-                style={{ width: `${100 - soldPercentage}%` }}
-              />
+            <div className="flex items-center gap-1 text-[#6b7a62]">
+              <TrendingUp className="w-3 h-3" />
+              <span className="text-xs font-medium">{product.sold} sotildi</span>
             </div>
           </div>
 
-          {/* Price and Order Button */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-xl">
-              <p className="text-xs text-gray-600 mb-0.5">Narxi</p>
-              <div className="flex items-baseline gap-1">
-                <span className="text-xl font-bold text-green-600">
-                  {product.pricePerUnit.toLocaleString()}
-                </span>
-                <span className="text-xs text-gray-600">so'm/{product.unit}</span>
-              </div>
-            </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowOrderModal(true);
-              }}
-              className="px-5 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold flex items-center gap-2 transition-all hover:scale-105 shadow-md"
-            >
-              <ShoppingCart className="w-4 h-4" />
-              <span>Sotib olish</span>
-            </button>
-          </div>
+          {/* Sotib olish tugmasi: To'liq yumaloq (Pill shape) */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowOrderModal(true);
+            }}
+            className="w-full py-4 bg-[#4a6d3a] hover:bg-[#3d5a30] text-white rounded-full font-bold flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-md shadow-green-900/10"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            <span>Sotib olish</span>
+          </button>
         </div>
       </div>
 
