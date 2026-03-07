@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { Search, CheckCheck } from "lucide-react";
 import { conversations } from "../data/chatData";
 
+
 export default function Chat() {
   const navigate = useNavigate();
 
