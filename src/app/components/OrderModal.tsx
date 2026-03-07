@@ -20,29 +20,34 @@ export default function OrderModal({ product, onClose, onOrder }: OrderModalProp
   };
 
   return (
-    <div className="fixed inset-0 z-[120] flex items-end justify-center animate-fadeIn">
-      {/* Fon: Bosilganda yopiladi */}
-      <div className="absolute inset-0 bg-[#2d3429]/60 backdrop-blur-md" onClick={onClose} />
+    /* z-[9999] - Bu ilovadagi barcha elementlardan ustun turishini kafolatlaydi */
+    <div className="fixed inset-0 z-[9999] flex items-end justify-center">
       
-      {/* Modal: z-index va silliq ko'tarilish */}
-      <div className="relative bg-white rounded-t-[2.5rem] w-full max-w-[430px] p-8 shadow-2xl animate-slideUp pb-[calc(env(safe-area-inset-bottom,20px)+20px)] border-t border-black/[0.03]">
+      {/* Orqa fon (Overlay) */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fadeIn" 
+        onClick={onClose} 
+      />
+      
+      {/* Modal oynasi */}
+      <div className="relative bg-white rounded-t-[2.5rem] w-full max-w-[430px] p-8 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] animate-slideUp pb-[calc(env(safe-area-inset-bottom,20px)+20px)] border-t border-black/[0.03]">
         
-        {/* Modal Handle */}
+        {/* Tortish chizig'i */}
         <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 -mt-2" />
 
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-2xl font-black text-[#2d3429] tracking-tight">Buyurtma</h3>
+          <h3 className="text-2xl font-black text-[#2d3429] tracking-tight">Xarid</h3>
           <button 
             onClick={onClose} 
-            className="p-2.5 bg-[#f1f4ee] hover:bg-[#e2f0d9] rounded-full active:scale-90 text-[#4a6d3a] transition-all"
+            className="p-2.5 bg-[#f1f4ee] rounded-full active:scale-90 text-[#4a6d3a]"
           >
             <X className="w-6 h-6" strokeWidth={2.5} />
           </button>
         </div>
 
-        {/* Product Info */}
+        {/* Mahsulot kartasi */}
         <div className="mb-6 p-4 bg-gradient-to-r from-[#e2f0d9] to-[#f1f4ee] rounded-[2rem] flex items-center gap-4">
-          <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-sm shrink-0">
+          <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-sm shrink-0 bg-white">
             <img src={product.image} alt={product.name} className="w-full h-full object-cover"/>
           </div>
           <div className="flex-1">
@@ -53,32 +58,24 @@ export default function OrderModal({ product, onClose, onOrder }: OrderModalProp
           </div>
         </div>
 
-        {/* Quantity Selector */}
+        {/* Miqdor tanlagich */}
         <div className="mb-8 bg-[#f8f9f5] p-6 rounded-[2.5rem] border border-black/[0.02]">
-          <label className="text-[10px] font-black text-[#6b7a62] mb-4 block text-center uppercase tracking-[0.2em]">
-            Miqdorni belgilang
-          </label>
           <div className="flex items-center justify-center gap-8">
             <button
-              onClick={() => { if (navigator.vibrate) navigator.vibrate(15); handleQuantityChange(quantity - 1); }}
+              onClick={() => { if (navigator.vibrate) navigator.vibrate(20); handleQuantityChange(quantity - 1); }}
               disabled={quantity <= 1}
-              className="w-14 h-14 bg-white shadow-sm disabled:opacity-30 text-[#4a6d3a] rounded-2xl flex items-center justify-center active:scale-90 border"
+              className="w-14 h-14 bg-white shadow-sm disabled:opacity-30 text-[#4a6d3a] rounded-2xl flex items-center justify-center active:scale-90 border border-black/[0.03]"
             >
               <Minus className="w-7 h-7" strokeWidth={3} />
             </button>
             
             <div className="flex flex-col items-center">
-              <Input
-                type="number"
-                value={quantity}
-                onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
-                className="text-center text-4xl font-black w-20 bg-transparent border-none focus-visible:ring-0 p-0"
-              />
+              <span className="text-4xl font-black text-[#2d3429]">{quantity}</span>
               <span className="text-[10px] font-bold text-[#a3b19b] uppercase">{product.unit}</span>
             </div>
 
             <button
-              onClick={() => { if (navigator.vibrate) navigator.vibrate(15); handleQuantityChange(quantity + 1); }}
+              onClick={() => { if (navigator.vibrate) navigator.vibrate(20); handleQuantityChange(quantity + 1); }}
               disabled={quantity >= availableQuantity}
               className="w-14 h-14 bg-[#4a6d3a] text-white shadow-lg disabled:opacity-30 rounded-2xl flex items-center justify-center active:scale-90"
             >
@@ -89,7 +86,7 @@ export default function OrderModal({ product, onClose, onOrder }: OrderModalProp
 
         {/* Footer */}
         <div className="flex items-center justify-between gap-4">
-          <div className="flex-1">
+          <div className="flex-1 text-left">
             <p className="text-[10px] font-bold text-[#a3b19b] mb-1 uppercase tracking-wider">Jami summa</p>
             <p className="text-2xl font-black text-[#2d3429] leading-none">
               {totalPrice.toLocaleString()} <span className="text-xs">so'm</span>
@@ -101,7 +98,7 @@ export default function OrderModal({ product, onClose, onOrder }: OrderModalProp
                onOrder(quantity); 
                onClose(); 
             }}
-            className="flex-[1.5] py-5 bg-[#4a6d3a] hover:bg-[#2d3429] text-white rounded-[1.8rem] font-bold text-lg flex items-center justify-center gap-2 shadow-xl active:scale-95 transition-all"
+            className="flex-[1.5] py-5 bg-[#4a6d3a] text-white rounded-[1.8rem] font-bold text-lg flex items-center justify-center gap-2 shadow-xl active:scale-95 transition-all"
           >
             <ShoppingCart className="w-5 h-5" strokeWidth={2.5} />
             Tasdiqlash
