@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { X, Plus, Minus, ShoppingCart } from "lucide-react";
-import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Product } from "../data/mockData";
 
@@ -15,105 +14,79 @@ export default function OrderModal({ product, onClose, onOrder }: OrderModalProp
   const availableQuantity = product.quantity - product.sold;
   const totalPrice = quantity * product.pricePerUnit;
 
-  const handleQuantityChange = (value: number) => {
-    if (value >= 1 && value <= availableQuantity) {
-      setQuantity(value);
-    }
-  };
-
-  const handleOrder = () => {
-    onOrder(quantity);
-    onClose();
-  };
-
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center z-50 animate-fadeIn">
-      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 animate-slideUp">
+    <div className="fixed inset-0 bg-[#2d3429]/40 backdrop-blur-sm flex items-end justify-center z-[100] animate-fadeIn">
+      <div className="bg-white rounded-t-[2.5rem] w-full max-w-md p-8 animate-slideUp shadow-2xl">
+        
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-gray-900">Buyurtma berish</h3>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X className="w-5 h-5" />
+        <div className="flex items-center justify-between mb-8">
+          <h3 className="text-2xl font-black text-[#2d3429]">Buyurtma</h3>
+          <button onClick={onClose} className="p-2 bg-[#f1f4ee] hover:bg-[#e2f0d9] rounded-full transition-colors text-[#4a6d3a]">
+            <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Product Info */}
-        <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-2xl">
-          <h4 className="font-bold text-lg mb-1">{product.name}</h4>
-          <p className="text-sm text-gray-600 mb-2">{product.farmerName}</p>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-green-600">
-              {product.pricePerUnit.toLocaleString()}
-            </span>
-            <span className="text-sm text-gray-600">so'm / {product.unit}</span>
+        <div className="mb-8 p-5 bg-[#e2f0d9] rounded-[2rem] flex items-center justify-between">
+          <div>
+            <h4 className="font-bold text-lg text-[#2d3429] mb-1">{product.name}</h4>
+            <p className="text-sm text-[#4a6d3a] font-medium">{product.pricePerUnit.toLocaleString()} so'm / {product.unit}</p>
+          </div>
+          <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-sm">
+            <img src={product.image} alt="" className="w-full h-full object-cover"/>
           </div>
         </div>
 
         {/* Quantity Selector */}
-        <div className="mb-6">
-          <label className="text-sm font-medium text-gray-700 mb-3 block">
-            Miqdorini tanlang
+        <div className="mb-8 bg-[#f8f9f5] p-6 rounded-[2rem]">
+          <label className="text-sm font-bold text-[#6b7a62] mb-4 block text-center uppercase tracking-wider">
+            Miqdorni tanlang
           </label>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center gap-6">
             <button
-              onClick={() => handleQuantityChange(quantity - 1)}
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
               disabled={quantity <= 1}
-              className="w-12 h-12 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 rounded-full flex items-center justify-center transition-colors"
+              className="w-14 h-14 bg-white shadow-sm hover:shadow-md disabled:opacity-50 text-[#4a6d3a] rounded-full flex items-center justify-center transition-all active:scale-95"
             >
-              <Minus className="w-5 h-5" />
+              <Minus className="w-6 h-6" />
             </button>
             <Input
               type="number"
               value={quantity}
-              onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
-              className="text-center text-xl font-bold w-24"
+              onChange={(e) => setQuantity(Math.min(availableQuantity, Math.max(1, parseInt(e.target.value) || 1)))}
+              className="text-center text-3xl font-black w-24 bg-transparent border-none focus-visible:ring-0"
               min={1}
               max={availableQuantity}
             />
             <button
-              onClick={() => handleQuantityChange(quantity + 1)}
+              onClick={() => setQuantity(Math.min(availableQuantity, quantity + 1))}
               disabled={quantity >= availableQuantity}
-              className="w-12 h-12 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white rounded-full flex items-center justify-center transition-colors"
+              className="w-14 h-14 bg-[#4a6d3a] hover:bg-[#3d5a30] text-white shadow-md disabled:opacity-50 rounded-full flex items-center justify-center transition-all active:scale-95"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-6 h-6" />
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-2 text-center">
-            Mavjud: {availableQuantity} {product.unit}
+          <p className="text-sm font-bold text-[#6b7a62] mt-4 text-center">
+            Omborda: <span className="text-[#4a6d3a]">{availableQuantity} {product.unit}</span>
           </p>
         </div>
 
-        {/* Total Price */}
-        <div className="mb-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-600">Miqdor:</span>
-            <span className="font-semibold">
-              {quantity} {product.unit}
-            </span>
+        {/* Total & Action */}
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex-1">
+            <p className="text-sm font-bold text-[#6b7a62] mb-1">Jami summa</p>
+            <p className="text-2xl font-black text-[#2d3429]">
+              {totalPrice.toLocaleString()} <span className="text-sm font-bold text-[#6b7a62]">so'm</span>
+            </p>
           </div>
-          <div className="h-px bg-gray-300 my-3" />
-          <div className="flex items-center justify-between">
-            <span className="text-gray-900 font-medium">Jami:</span>
-            <div className="text-right">
-              <span className="text-2xl font-bold text-green-600">
-                {totalPrice.toLocaleString()}
-              </span>
-              <span className="text-sm text-gray-600 ml-1">so'm</span>
-            </div>
-          </div>
+          <button
+            onClick={() => { onOrder(quantity); onClose(); }}
+            className="flex-1 py-5 bg-[#4a6d3a] hover:bg-[#3d5a30] text-white rounded-[2rem] font-bold text-lg flex items-center justify-center gap-2 shadow-xl shadow-green-900/20 active:scale-95 transition-transform"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            Tasdiqlash
+          </button>
         </div>
-
-        {/* Order Button */}
-        <Button
-          onClick={handleOrder}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-6 text-lg font-semibold rounded-2xl flex items-center justify-center gap-2"
-        >
-          <ShoppingCart className="w-5 h-5" />
-          Buyurtma berish
-        </Button>
       </div>
     </div>
   );
