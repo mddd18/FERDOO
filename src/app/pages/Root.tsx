@@ -16,60 +16,91 @@ export default function Root() {
   const unreadMessages = conversations.reduce((sum, conv) => sum + conv.unreadCount, 0);
 
   const navItems = [
-    { path: "/", icon: Home, label: "Bosh sahifa" },
-    { path: "/chat", icon: MessageCircle, label: "Xabarlar", badge: unreadMessages },
-    { path: "/orders", icon: ShoppingBag, label: "Buyurtmalar" },
+    { path: "/", icon: Home, label: "Asosiy" },
+    { path: "/chat", icon: MessageCircle, label: "Chat", badge: unreadMessages },
+    { path: "/orders", icon: ShoppingBag, label: "Xaridlar" },
   ];
 
   return (
-    <div className="min-h-screen pb-32">
-      {/* Tepa menyu (Header) - Mobil ramka ichiga qulflangan */}
-      <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-6 z-50 pointer-events-none">
-        <div className="flex items-center justify-between pointer-events-auto">
-          <div className="bg-white/80 backdrop-blur-xl px-5 py-2.5 rounded-2xl shadow-sm border border-white/50">
-            <h1 className="text-xl font-black text-[#2d5a27] tracking-tight">FERDO</h1>
+    <div className="min-h-screen pb-28">
+      
+      {/* Tepa menyu (Header) - Toza va silliq (Seamless) uslub */}
+      <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-[#f1f4ee]/80 backdrop-blur-xl border-b border-[#2d3429]/5">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+             <div className="w-9 h-9 bg-[#4a6d3a] rounded-xl flex items-center justify-center shadow-md">
+               <span className="text-white font-black text-lg leading-none mt-0.5">F</span>
+             </div>
+             <h1 className="text-2xl font-black text-[#2d3429] tracking-tight">FERDO</h1>
           </div>
-          <button onClick={() => navigate('/notifications')} className="relative p-3 bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-white/50 active:scale-95 transition-transform">
-            <Bell className="w-6 h-6 text-[#2d5a27]" />
+          <button 
+            onClick={() => navigate('/notifications')} 
+            className="relative p-2.5 text-[#4a6d3a] bg-white rounded-full shadow-sm border border-white active:scale-90 transition-transform"
+          >
+            <Bell className="w-5 h-5" />
             {unreadNotifications > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-md">
-                {unreadNotifications}
-              </span>
+              <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white shadow-sm"></span>
             )}
           </button>
         </div>
       </header>
 
       {/* Asosiy kontent */}
-      <main className="px-4 pt-28 h-full">
+      <main className="px-4 pt-24 h-full">
         <Outlet />
       </main>
 
-      {/* Pastki menyu (Bottom Navigation) - Mobil ramka markaziga qulflangan */}
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[382px] bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white/50 z-50">
-        <div className="flex justify-around items-center p-2">
+      {/* Pastki menyu (Bottom Navigation) - Haqiqiy Native App uslubi */}
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white/95 backdrop-blur-2xl border-t border-[#2d3429]/5 rounded-t-[2rem] z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
+        <div className="flex justify-around items-end px-2 pt-3 pb-6">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
+            
             return (
               <button 
                 key={item.path} 
                 onClick={() => navigate(item.path)} 
-                className={`relative flex flex-col items-center justify-center w-16 h-16 rounded-full transition-all duration-300 active:scale-90 ${isActive ? "bg-[#e2f0d9] text-[#4a6d3a]" : "text-[#6b7a62]"}`}
+                className="relative flex flex-col items-center justify-center w-20 gap-1.5 group"
               >
+                {/* Aktiv element ustidagi chiziqcha (Indicator) */}
+                <div 
+                  className={`absolute -top-3 w-8 h-1 rounded-full transition-all duration-300 ${
+                    isActive ? 'bg-[#4a6d3a]' : 'bg-transparent'
+                  }`} 
+                />
+                
                 <div className="relative">
-                  <Icon className={`w-6 h-6 transition-transform duration-300 ${isActive ? 'scale-110 drop-shadow-sm' : ''}`} />
+                  <Icon 
+                    className={`w-6 h-6 transition-all duration-300 ${
+                      isActive 
+                        ? 'text-[#4a6d3a] drop-shadow-sm scale-110' 
+                        : 'text-[#a3b19b] group-hover:text-[#6b7a62]'
+                    }`} 
+                    strokeWidth={isActive ? 2.5 : 2}
+                  />
+                  
+                  {/* Bildirishnoma soni */}
                   {item.badge && item.badge > 0 && (
-                    <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold shadow-sm">
+                    <span className="absolute -top-1.5 -right-2.5 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold shadow-sm border-[1.5px] border-white">
                       {item.badge}
                     </span>
                   )}
                 </div>
+
+                <span 
+                  className={`text-[11px] font-bold transition-all duration-300 ${
+                    isActive ? 'text-[#4a6d3a]' : 'text-[#a3b19b]'
+                  }`}
+                >
+                  {item.label}
+                </span>
               </button>
             );
           })}
         </div>
       </nav>
+      
     </div>
   );
 }
