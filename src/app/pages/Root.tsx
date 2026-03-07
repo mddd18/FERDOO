@@ -31,7 +31,7 @@ export default function Root() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9f5] flex flex-col pt-[env(safe-area-inset-top)] pb-[calc(6rem+env(safe-area-inset-bottom))]">
+    <div className="min-h-screen bg-[#f8f9f5] flex flex-col pt-[env(safe-area-inset-top)]">
       
       <Toaster 
         position="top-center" 
@@ -44,6 +44,7 @@ export default function Root() {
         }} 
       />
       
+      {/* Header: z-50 */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-[#f8f9f5]/80 backdrop-blur-2xl border-b border-black/[0.02]">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
@@ -73,16 +74,18 @@ export default function Root() {
         </div>
       </header>
 
-      {/* Tepadagi Header ostida qolib ketmasligi uchun pt-28 qo'shildi */}
-      <main key={location.pathname} className="flex-1 px-4 pt-28 pb-10 animate-slideInRight will-change-transform">
+      {/* MAIN: pt-24 tepadan joy, pb-28 pastdan joy tashlaydi */}
+      <main key={location.pathname} className="flex-1 px-4 pt-24 pb-28 animate-slideInRight will-change-transform">
         <Outlet />
       </main>
 
+      {/* Bottom Nav: z-50 */}
       <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white/95 backdrop-blur-2xl rounded-t-[2.5rem] z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] pb-[env(safe-area-inset-bottom)] border-t border-black/[0.02]">
         <div className="flex justify-around items-center px-4 py-4">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
+            
             return (
               <button 
                 key={item.path} 
@@ -91,10 +94,7 @@ export default function Root() {
               >
                 <div className={`absolute inset-0 rounded-[1.2rem] transition-all duration-300 ${isActive ? 'bg-[#e2f0d9] scale-100 opacity-100' : 'scale-50 opacity-0'}`} />
                 <div className="relative z-10 flex flex-col items-center gap-1">
-                  <div className="relative">
-                    <Icon className={`w-5 h-5 transition-all duration-300 ${isActive ? 'text-[#4a6d3a]' : 'text-[#a3b19b]'}`} strokeWidth={isActive ? 2.5 : 2} />
-                    {item.badge && item.badge > 0 && <span className="absolute -top-1.5 -right-2.5 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold shadow-sm border-[1.5px] border-[#e2f0d9]">{item.badge}</span>}
-                  </div>
+                  <Icon className={`w-5 h-5 transition-all duration-300 ${isActive ? 'text-[#4a6d3a]' : 'text-[#a3b19b]'}`} strokeWidth={isActive ? 2.5 : 2} />
                   <span className={`text-[10px] font-bold transition-all duration-300 ${isActive ? 'text-[#4a6d3a] mt-0.5' : 'hidden'}`}>{item.label}</span>
                 </div>
               </button>
@@ -102,6 +102,7 @@ export default function Root() {
           })}
         </div>
       </nav>
+      
     </div>
   );
 }
