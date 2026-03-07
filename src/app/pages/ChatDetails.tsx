@@ -31,34 +31,34 @@ export default function ChatDetails() {
       senderId: "buyer",
       senderName: "Siz",
       timestamp: new Date().toISOString(),
-      isRead: false, // Yangi yuborilgan xabar hali o'qilmagan
+      isRead: false,
     };
 
     setMessages((prev) => [...prev, newMsg]);
     setNewMessage("");
 
-    // Realistik effekt: Fermer "yozmoqda..." holati simulyatsiyasi
     setTimeout(() => {
       const replyMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        message: "Yaxshi, tushunarlu. Ertaga ertalab soat 9 larda yetkazib beramiz.",
+        message: "Yaxshi, tushunarli. Ertaga ertalab soat 9 larda yetkazib beramiz.",
         senderId: conversation.farmerId,
         senderName: conversation.farmerName,
         timestamp: new Date().toISOString(),
         isRead: true,
       };
       setMessages((prev) => [...prev, replyMsg]);
-      
-      if (navigator.vibrate) navigator.vibrate(10); // Xabar kelganda qisqa titrash
+      if (navigator.vibrate) navigator.vibrate(10);
     }, 2000);
   };
 
   if (!conversation) return <div className="p-4">Chat topilmadi</div>;
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#f1f4ee] flex flex-col animate-fadeIn">
-      {/* Header */}
-      <header className="bg-white/95 backdrop-blur-xl px-3 py-3 flex items-center gap-3 border-b border-black/[0.03] shrink-0 shadow-sm">
+    /* fixed o'rniga h-dvh ishlatamiz, bu mobil klaviatura ochilganda ekranni to'g'ri hisoblaydi */
+    <div className="fixed inset-0 z-[100] bg-[#f1f4ee] flex flex-col h-dvh animate-fadeIn overflow-hidden">
+      
+      {/* Header: z-50 va fixed qilib tepadagi joyini qulflaymiz */}
+      <header className="fixed top-0 left-0 right-0 h-[72px] bg-white/95 backdrop-blur-xl px-3 py-3 flex items-center gap-3 border-b border-black/[0.03] z-50 shadow-sm">
         <button onClick={() => navigate(-1)} className="p-2.5 bg-[#f8f9f5] rounded-full active:scale-95 transition-transform text-[#2d3429]">
           <ArrowLeft className="w-5 h-5" />
         </button>
@@ -78,8 +78,8 @@ export default function ChatDetails() {
         </div>
       </header>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* Messages: pt-[72px] header tegida qolib ketmasligi uchun muhim */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pt-[84px] pb-24">
         {messages.map((msg, index) => {
           const isMe = msg.senderId === "buyer";
           return (
@@ -105,8 +105,8 @@ export default function ChatDetails() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className="p-3 bg-white/95 backdrop-blur-xl border-t border-black/[0.03] pb-[env(safe-area-inset-bottom)]">
+      {/* Input: Pastki qism ham joyida qulflangan */}
+      <div className="bg-white/95 backdrop-blur-xl border-t border-black/[0.03] p-3 pb-[env(safe-area-inset-bottom,12px)]">
         <div className="flex items-center gap-2 bg-[#f8f9f5] p-1.5 rounded-full border border-black/[0.02]">
           <input
             type="text"
