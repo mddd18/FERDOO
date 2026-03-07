@@ -5,26 +5,31 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  /* Rasmga mos asosiy uslub: transition, yumaloq burchaklar va tracking-tight */
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-200 active:scale-95 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/20 shadow-sm",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        /* Rasmdagi asosiy yashil tugma uslubi */
+        default: "bg-[#d0e7d2] text-[#2d5a27] hover:bg-[#c2dec4] hover:shadow-md",
+        /* Shaffof (glassmorphism) uslubdagi tugma */
         outline:
-          "border bg-background text-foreground hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border-none bg-white/60 backdrop-blur-md text-[#2d5a27] hover:bg-white/80 hover:shadow-md",
+        /* To'q rangli (aktiv) tugma uchun */
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "bg-[#4a6d3a] text-white hover:bg-[#3d5a30] hover:shadow-md",
+        destructive:
+          "bg-[#f8d7da] text-[#721c24] hover:bg-[#f5c6cb]",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+          "hover:bg-[#d0e7d2]/30 text-[#2d5a27]",
+        link: "text-[#4a6d3a] underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9 rounded-md",
+        /* Rasmda tugmalar biroz kattaroq va balandroq */
+        default: "h-11 px-6 py-2",
+        sm: "h-9 px-4 text-xs",
+        lg: "h-13 rounded-full px-8 text-base",
+        icon: "size-11 rounded-full",
       },
     },
     defaultVariants: {
