@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { products, farmers } from "../data/mockData";
 import { Search, ChevronRight, Zap } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { Button } from "../components/ui/button";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+
   const topCategories = [
     { name: "Sabzavot", icon: "🥕" },
     { name: "Mevalar", icon: "🍎" },
@@ -15,10 +17,44 @@ export default function Home() {
 
   const featuredFarmer = farmers[0];
 
+  // Simulyatsiya: Ma'lumotlar serverdan kelishini kutish (0.8 soniya)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // --- SKELETON (YUKLANISH) HOLATI ---
+  if (isLoading) {
+    return (
+      <div className="p-6 space-y-8 animate-fadeIn">
+        <div className="space-y-4">
+          <div className="h-8 w-3/4 bg-black/[0.05] animate-pulse rounded-lg"></div>
+          <div className="h-4 w-1/2 bg-black/[0.05] animate-pulse rounded-md"></div>
+        </div>
+        <div className="w-full h-14 bg-white/50 animate-pulse rounded-full"></div>
+        <div className="grid grid-cols-4 gap-3">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="flex flex-col items-center gap-2">
+              <div className="w-14 h-14 bg-white/50 animate-pulse rounded-2xl"></div>
+              <div className="w-10 h-3 bg-black/[0.05] animate-pulse rounded-full"></div>
+            </div>
+          ))}
+        </div>
+        <div className="w-full h-40 bg-[#4a6d3a]/20 animate-pulse rounded-[2rem]"></div>
+        <div className="space-y-5 mt-4">
+          {[1,2].map(i => (
+            <div key={i} className="w-full h-72 bg-white/60 animate-pulse rounded-[1.8rem]"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // --- ASOSIY KONTENT (YUKLANIB BO'LGANDAN SO'NG) ---
   return (
     <div className="p-6 space-y-8 animate-fadeIn">
-      
-      {/* Sarlavha va Qidiruv - Yozuvlar ingichkaroq qilindi */}
       <div className="space-y-5">
         <div>
           <h2 className="text-2xl font-bold text-[#2d3429] tracking-tight">Bugun nima xarid <span className="text-[#4a6d3a]">qilasiz?</span></h2>
@@ -36,11 +72,13 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Tezkor Kategoriyalar */}
       <div className="grid grid-cols-4 gap-3">
         {topCategories.map(cat => (
           <div key={cat.name} className="flex flex-col items-center gap-2">
-            <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-sm cursor-pointer active:scale-95 transition-transform border border-white/60">
+            <div 
+              onClick={() => { if (navigator.vibrate) navigator.vibrate(20); }}
+              className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-sm cursor-pointer active:scale-95 transition-transform border border-white/60"
+            >
               {cat.icon}
             </div>
             <span className="text-xs font-semibold text-[#6b7a62]">{cat.name}</span>
@@ -48,7 +86,6 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Kun Fermeri (Banner) */}
       {featuredFarmer && (
         <div className="relative bg-[#4a6d3a] p-6 rounded-[2rem] text-white shadow-md overflow-hidden">
           <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-xl" />
@@ -71,7 +108,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Eng Sara Mahsulotlar */}
       <div className="space-y-4">
         <div className="flex items-center justify-between px-1">
           <h3 className="text-lg font-bold text-[#2d3429]">Sara Mahsulotlar</h3>
