@@ -14,103 +14,81 @@ export default function Home() {
   });
 
   return (
-    <div className="p-4 space-y-6">
-      {/* Filters */}
+    <div className="p-6 space-y-8 animate-fadeIn">
+      {/* Header Qismi */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <Filter className="w-5 h-5 text-gray-700" />
-          <span className="font-semibold text-gray-900">Filtrlash</span>
+        <h2 className="text-3xl font-black text-[#2d3429] mb-2">Xush kelibsiz!</h2>
+        <p className="text-[#6b7a62] font-medium">Eng sara qishloq xo'jaligi mahsulotlari</p>
+      </div>
+
+      {/* Filtrlar */}
+      <div className="space-y-5">
+        <div className="flex items-center gap-2">
+          <div className="p-2 bg-[#e2f0d9] rounded-xl text-[#4a6d3a]">
+            <Filter className="w-5 h-5" />
+          </div>
+          <span className="font-bold text-[#2d3429] text-lg">Filtrlash</span>
         </div>
         
         {/* Category Filter */}
-        <div className="mb-4">
-          <label className="text-xs font-medium text-gray-600 mb-2 block uppercase tracking-wide">
-            Kategoriya
-          </label>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                selectedCategory === 'all'
-                  ? 'bg-green-600 text-white shadow-md scale-105'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Hammasi
-            </button>
-            <button
-              onClick={() => setSelectedCategory('oliy')}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                selectedCategory === 'oliy'
-                  ? 'bg-yellow-500 text-white shadow-md scale-105'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              ⭐ Oliy
-            </button>
-            <button
-              onClick={() => setSelectedCategory('oddiy')}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                selectedCategory === 'oddiy'
-                  ? 'bg-blue-500 text-white shadow-md scale-105'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Oddiy
-            </button>
+        <div>
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {[
+              { id: 'all', label: 'Hammasi' },
+              { id: 'oliy', label: '⭐ Oliy nav' },
+              { id: 'oddiy', label: 'Oddiy' }
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id as any)}
+                className={`whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 shadow-sm ${
+                  selectedCategory === cat.id
+                    ? 'bg-[#4a6d3a] text-white shadow-md scale-105 transform'
+                    : 'bg-white text-[#6b7a62] hover:bg-[#e2f0d9] hover:text-[#4a6d3a]'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Type Filter */}
         <div>
-          <label className="text-xs font-medium text-gray-600 mb-2 block uppercase tracking-wide">
-            Mahsulot turi
-          </label>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setSelectedType('all')}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                selectedType === 'all'
-                  ? 'bg-green-600 text-white shadow-md scale-105'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Hammasi
-            </button>
-            <button
-              onClick={() => setSelectedType('Sabzavot')}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                selectedType === 'Sabzavot'
-                  ? 'bg-green-600 text-white shadow-md scale-105'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              🥕 Sabzavot
-            </button>
-            <button
-              onClick={() => setSelectedType('Sut mahsuloti')}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                selectedType === 'Sut mahsuloti'
-                  ? 'bg-green-600 text-white shadow-md scale-105'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              🥛 Sut
-            </button>
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {[
+              { id: 'all', label: 'Barchasi', icon: '🍽️' },
+              { id: 'Sabzavot', label: 'Sabzavotlar', icon: '🥕' },
+              { id: 'Sut mahsuloti', label: 'Sut mahsulotlari', icon: '🥛' }
+            ].map((type) => (
+              <button
+                key={type.id}
+                onClick={() => setSelectedType(type.id as any)}
+                className={`whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 shadow-sm flex items-center gap-2 ${
+                  selectedType === type.id
+                    ? 'bg-[#e2f0d9] text-[#2d5a27] shadow-md scale-105 transform border border-[#4a6d3a]/20'
+                    : 'bg-white text-[#6b7a62] hover:bg-[#f1f4ee]'
+                }`}
+              >
+                <span>{type.icon}</span>
+                {type.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Products Grid */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold text-gray-900 text-lg">
+      <div className="space-y-6 pt-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-extrabold text-[#2d3429] text-xl">
             Mavjud mahsulotlar
           </h3>
-          <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+          <span className="bg-[#e2f0d9] text-[#4a6d3a] px-4 py-1.5 rounded-full text-sm font-bold shadow-sm">
             {filteredProducts.length} ta
           </span>
         </div>
+        
         {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
