@@ -1,3 +1,37 @@
-@import './fonts.css';
-@import './tailwind.css';
-@import './theme.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Tugma bosilganda chiqadigan ko'k fonni yo'q qilish */
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    /* Kompyuterda orqa fon to'qroq bo'ladi, ilova ajralib turishi uchun */
+    @apply bg-gray-200 antialiased; 
+    
+    /* Sahifani tortganda brauzer yangilanishini (pull-to-refresh) to'xtatish */
+    overscroll-behavior-y: none; 
+    
+    /* Mobil ilovalardagi kabi matnni belgilashni taqiqlash */
+    user-select: none; 
+    -webkit-user-select: none;
+  }
+
+  /* Asosiy ilova qutisi (Mobil simulyatsiya) */
+  #root {
+    @apply mx-auto w-full max-w-[430px] min-h-[100dvh] bg-background relative shadow-2xl overflow-x-hidden;
+  }
+  
+  /* Barcha scrollbarlarni yashirish, lekin skroll ishlashda davom etadi */
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+}
