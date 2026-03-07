@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "react-router";
-import { Home, ShoppingBag, MessageCircle, Bell } from "lucide-react";
+import { Home, ShoppingBag, MessageCircle, Bell, Sparkles } from "lucide-react"; // <-- Sparkles qo'shildi
 import { notifications, conversations } from "../data/chatData";
 import { useEffect } from "react";
 import { Toaster } from "sonner";
@@ -16,8 +16,10 @@ export default function Root() {
   const unreadNotifications = notifications.filter(n => !n.isRead).length;
   const unreadMessages = conversations.reduce((sum, conv) => sum + conv.unreadCount, 0);
 
+  // AI Zaxira sahifasi menyuga qo'shildi
   const navItems = [
     { path: "/", icon: Home, label: "Asosiy" },
+    { path: "/ai-agent", icon: Sparkles, label: "AI Zaxira" }, // <-- YANGI QO'SHILDI
     { path: "/chat", icon: MessageCircle, label: "Chat", badge: unreadMessages },
     { path: "/orders", icon: ShoppingBag, label: "Xaridlar" },
   ];
