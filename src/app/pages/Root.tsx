@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "react-router";
-import { Home, ShoppingBag, MessageCircle, Bell, Sparkles } from "lucide-react"; // <-- Sparkles qo'shildi
+import { Home, ShoppingBag, MessageCircle, Bell, Sparkles } from "lucide-react";
 import { notifications, conversations } from "../data/chatData";
 import { useEffect } from "react";
 import { Toaster } from "sonner";
@@ -16,10 +16,9 @@ export default function Root() {
   const unreadNotifications = notifications.filter(n => !n.isRead).length;
   const unreadMessages = conversations.reduce((sum, conv) => sum + conv.unreadCount, 0);
 
-  // AI Zaxira sahifasi menyuga qo'shildi
   const navItems = [
     { path: "/", icon: Home, label: "Asosiy" },
-    { path: "/ai-agent", icon: Sparkles, label: "AI Zaxira" }, // <-- YANGI QO'SHILDI
+    { path: "/ai-agent", icon: Sparkles, label: "AI Zaxira" },
     { path: "/chat", icon: MessageCircle, label: "Chat", badge: unreadMessages },
     { path: "/orders", icon: ShoppingBag, label: "Xaridlar" },
   ];
@@ -48,9 +47,7 @@ export default function Root() {
       {/* Tepa Header */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-[#f8f9f5]/80 backdrop-blur-2xl pt-[env(safe-area-inset-top)]">
         <div className="flex items-center justify-between px-6 py-4">
-          
           <div className="flex items-center gap-3">
-             {/* LOGO SHU YERDA CHIQADI */}
              <img 
                src="/logo.png" 
                alt="Ferdo Logo" 
@@ -78,8 +75,8 @@ export default function Root() {
         </div>
       </header>
 
-      {/* ASOSIY KONTENT */}
-      <main key={location.pathname} className="h-full animate-slideInRight will-change-transform">
+      {/* ASOSIY KONTENT: Mana shu yerga `px-4 pt-24` qo'shildi, shunda qop ketmaydi! */}
+      <main key={location.pathname} className="h-full px-4 pt-24 animate-slideInRight will-change-transform">
         <Outlet />
       </main>
 
