@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
       { path: "farmer/:id", Component: FarmerProfile },
       { path: "orders", Component: OrderHistory },
       { path: "chat", Component: Chat },
-      { path: "chat/:farmerId", Component: ChatDetails },
+      { path: "chat/:id", Component: ChatDetails }, // <-- MANA SHU YER O'ZGARDI
       { path: "notifications", Component: Notifications },
     ],
   },
