@@ -4,10 +4,25 @@ import { Product } from "../data/mockData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useState } from "react";
 import OrderModal from "./OrderModal";
+import { toast } from "sonner"; // Toast import qildik
 
 export default function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
   const [showOrderModal, setShowOrderModal] = useState(false);
+
+  const handleOrderConfirm = (quantity: number) => {
+    setShowOrderModal(false);
+    
+    // Muvaffaqiyatli xarid titrashi (Ketma-ket 2 marta mayin titrash)
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate([30, 50, 30]); 
+    }
+
+    // Zamonaviy Toast xabar! (Eski alert o'rniga)
+    toast.success("Muvaffaqiyatli xarid!", {
+      description: `${quantity} ${product.unit} ${product.name} savatga tushdi.`,
+    });
+  };
 
   return (
     <>
@@ -44,13 +59,27 @@ export default function ProductCard({ product }: { product: Product }) {
             </div>
           </div>
 
-          <button onClick={(e) => { e.stopPropagation(); setShowOrderModal(true); }} className="w-full py-3.5 bg-[#4a6d3a] hover:bg-[#3d5a30] text-white rounded-full font-semibold text-sm flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-sm">
+          <button 
+            onClick={(e) => { 
+              e.stopPropagation();
+              if (navigator.vibrate) navigator.vibrate(20); // Tugma bosilganda yengil titrash
+              setShowOrderModal(true); 
+            }} 
+            className="w-full py-3.5 bg-[#4a6d3a] hover:bg-[#3d5a30] text-white rounded-full font-semibold text-sm flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-sm"
+          >
             <ShoppingCart className="w-4 h-4" />
             <span>Xarid qilish</span>
           </button>
         </div>
       </div>
-      {showOrderModal && <OrderModal product={product} onClose={() => setShowOrderModal(false)} onOrder={() => setShowOrderModal(false)} />}
+      
+      {showOrderModal && (
+        <OrderModal 
+          product={product} 
+          onClose={() => setShowOrderModal(false)} 
+          onOrder={handleOrderConfirm} // Xarid tasdiqlandi
+        />
+      )}
     </>
   );
 }
