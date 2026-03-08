@@ -111,6 +111,17 @@
     overflow-x: hidden;
   }
 
+  /* Z-INDEX TARTIBLASH (Muhim!) */
+  header { z-index: 50; }
+  nav { z-index: 50; }
+  
+  /* Modal oynasi barcha menyulardan (hatto chatdan ham) ustun turishi shart */
+  [data-slot="dialog-content"], 
+  .fixed.inset-0.z-\[9999\],
+  .fixed.inset-0.z-\[1000\] { 
+    z-index: 1000 !important; 
+  }
+
   /* Rasmga mos Card dizayni uchun global stil */
   [data-slot="card"] {
     @apply shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-none backdrop-blur-sm bg-white/90;
@@ -125,7 +136,8 @@
     @apply tracking-tight text-[#2d5a27] font-bold;
   }
 
-  /* Custom animations */
+  /* --- ANIMATSIYALAR --- */
+  
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -136,11 +148,37 @@
     to { transform: translateY(0); }
   }
 
+  /* Yon tomondan yumshoq kirib kelish (Sahifalar o'zgarishi uchun) */
+  @keyframes slideInRight {
+    from { 
+      transform: translateX(15px) scale(0.99); 
+      opacity: 0; 
+    }
+    to { 
+      transform: translateX(0) scale(1); 
+      opacity: 1; 
+    }
+  }
+
+  /* Skeleton (Yuklanish) miltillashi */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
   .animate-fadeIn {
-    animation: fadeIn 0.2s ease-out;
+    animation: fadeIn 0.2s ease-out forwards;
   }
 
   .animate-slideUp {
-    animation: slideUp 0.3s ease-out;
+    animation: slideUp 0.3s ease-out forwards;
+  }
+
+  .animate-slideInRight {
+    animation: slideInRight 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+
+  .animate-pulse {
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
