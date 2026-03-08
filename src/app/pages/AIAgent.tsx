@@ -4,12 +4,7 @@ import { toast } from "sonner";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 const initialSuggestions = [
-  {
-    // ... boshqa ma'lumotlar
-    weeklySales: 45, // Haftalik o'rtacha sotuv
-    currentStock: 8,  // Hozirgi qoldiq
-    reason: "Sizda pomidor 2 kunga yetadi. O'tgan haftadagi kabi 40kg olishni tavsiya qilaman."
-  },
+ 
   {
     id: 'ai1',
     productName: 'Sarxil Qizil Pomidor',
