@@ -47,40 +47,41 @@ export default function ChatDetails() {
         isRead: true,
       };
       setMessages((prev) => [...prev, replyMsg]);
-      if (navigator.vibrate) navigator.vibrate(10);
+      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(10);
     }, 2000);
   };
 
   if (!conversation) return <div className="p-4">Chat topilmadi</div>;
 
   return (
-    /* h-dvh mobil brauzerlarda klaviatura bilan ishlashni yaxshilaydi */
-    <div className="fixed inset-0 z-[100] bg-[#f1f4ee] flex flex-col h-dvh animate-fadeIn overflow-hidden">
+    <div className="fixed inset-0 z-[100] bg-[#f1f4ee] flex flex-col h-[100dvh] animate-fadeIn overflow-hidden">
       
-      {/* Header: Balandligi aniq (h-[72px]) */}
-      <header className="h-[72px] bg-white/95 backdrop-blur-xl px-3 py-3 flex items-center justify-between border-b border-black/[0.03] shrink-0 z-50 shadow-sm">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2.5 bg-[#f8f9f5] rounded-full active:scale-95 transition-transform text-[#2d3429]">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
+      {/* 1. TEPADAN QOCHIRISH (pt-[env(safe-area-inset-top)]) qo'shildi */}
+      <header className="bg-white/95 backdrop-blur-xl border-b border-black/[0.03] shrink-0 z-50 shadow-sm pt-[env(safe-area-inset-top)]">
+        <div className="h-[72px] px-3 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <img src={conversation.farmerAvatar} alt="" className="w-11 h-11 rounded-full object-cover border border-gray-100" />
-              <span className="absolute bottom-0.5 right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
-            </div>
-            <div>
-              <h2 className="font-bold text-[#2d3429] leading-tight text-sm">{conversation.farmerName}</h2>
-              <p className="text-[10px] font-bold text-[#4a6d3a]">Onlayn</p>
+            <button onClick={() => navigate(-1)} className="p-2.5 bg-[#f8f9f5] rounded-full active:scale-95 transition-transform text-[#2d3429]">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <img src={conversation.farmerAvatar} alt="" className="w-11 h-11 rounded-full object-cover border border-gray-100" />
+                <span className="absolute bottom-0.5 right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+              </div>
+              <div>
+                <h2 className="font-bold text-[#2d3429] leading-tight text-sm">{conversation.farmerName}</h2>
+                <p className="text-[10px] font-bold text-[#4a6d3a]">Onlayn</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex items-center gap-1">
-          <button className="p-2 text-[#4a6d3a] active:bg-gray-100 rounded-full"><Phone className="w-5 h-5" /></button>
-          <button className="p-2 text-[#6b7a62] active:bg-gray-100 rounded-full"><MoreVertical className="w-5 h-5" /></button>
+          <div className="flex items-center gap-1">
+            <button className="p-2 text-[#4a6d3a] active:bg-gray-100 rounded-full"><Phone className="w-5 h-5" /></button>
+            <button className="p-2 text-[#6b7a62] active:bg-gray-100 rounded-full"><MoreVertical className="w-5 h-5" /></button>
+          </div>
         </div>
       </header>
 
-      {/* Messages: flex-1 orqali qolgan barcha bo'sh joyni egallaydi */}
+      {/* Xabarlar qismi */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg, index) => {
           const isMe = msg.senderId === "buyer";
@@ -107,8 +108,8 @@ export default function ChatDetails() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Section: fixed emas, shunchaki flex konteynerning oxiri */}
-      <div className="bg-white/95 backdrop-blur-xl border-t border-black/[0.03] p-3 pb-[calc(env(safe-area-inset-bottom,12px)+8px)] shrink-0">
+      {/* 2. PASTDAN QOCHIRISH (pb-[calc(env(safe-area-inset-bottom,20px)+12px)]) qo'shildi */}
+      <div className="bg-white/95 backdrop-blur-xl border-t border-black/[0.03] p-3 pb-[calc(env(safe-area-inset-bottom,20px)+12px)] shrink-0">
         <div className="flex items-center gap-2 bg-[#f8f9f5] p-1.5 rounded-full border border-black/[0.02]">
           <input
             type="text"
@@ -127,6 +128,7 @@ export default function ChatDetails() {
           </button>
         </div>
       </div>
+      
     </div>
   );
 }
