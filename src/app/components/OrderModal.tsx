@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X, Plus, Minus, ShoppingCart } from "lucide-react";
 import { Input } from "./ui/input";
 import { Product } from "../data/mockData";
@@ -11,26 +12,38 @@ interface OrderModalProps {
 
 export default function OrderModal({ product, onClose, onOrder }: OrderModalProps) {
   const [quantity, setQuantity] = useState(1);
+  const [mounted, setMounted] = useState(false);
+
   const availableQuantity = product.quantity - product.sold;
   const totalPrice = quantity * product.pricePerUnit;
+
+  // Modal faqat klient tomonida (brauzerda) render bo'lishini ta'minlash
+  useEffect(() => {
+    setMounted(true);
+    // Modal ochilganda orqa fonga scroll bo'lishini taqiqlash
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
 
   const handleQuantityChange = (val: number) => {
     const clampedVal = Math.min(availableQuantity, Math.max(1, isNaN(val) ? 1 : val));
     setQuantity(clampedVal);
   };
 
-  return (
-    /* z-[9999] - Bu ilovadagi barcha elementlardan ustun turishini kafolatlaydi */
-    <div className="fixed inset-0 z-[9999] flex items-end justify-center">
+  const modalContent = (
+    /* z-[9999] endi mutlaq ishlaydi chunki u bevosita body ichida render bo'lyapti */
+    <div className="fixed inset-0 z-[9999] flex items-end justify-center pointer-events-auto">
       
       {/* Orqa fon (Overlay) */}
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fadeIn" 
+        className="absolute inset-0 bg-[#2d3429]/60 backdrop-blur-sm animate-fadeIn" 
         onClick={onClose} 
       />
       
       {/* Modal oynasi */}
-      <div className="relative bg-white rounded-t-[2.5rem] w-full max-w-[430px] p-8 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] animate-slideUp pb-[calc(env(safe-area-inset-bottom,20px)+20px)] border-t border-black/[0.03]">
+      <div className="relative bg-white rounded-t-[2.5rem] w-full max-w-[430px] p-8 shadow-[0_-20px_50px_rgba(0,0,0,0.3)] animate-slideUp pb-[calc(env(safe-area-inset-bottom,20px)+20px)] border-t border-black/[0.03] will-change-transform">
         
         {/* Tortish chizig'i */}
         <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 -mt-2" />
@@ -71,7 +84,7 @@ export default function OrderModal({ product, onClose, onOrder }: OrderModalProp
             
             <div className="flex flex-col items-center">
               <span className="text-4xl font-black text-[#2d3429]">{quantity}</span>
-              <span className="text-[10px] font-bold text-[#a3b19b] uppercase">{product.unit}</span>
+              <span className="text-[10px] font-bold text-[#a3b19b] uppercase tracking-wider mt-1">{product.unit}</span>
             </div>
 
             <button
@@ -96,7 +109,7 @@ export default function OrderModal({ product, onClose, onOrder }: OrderModalProp
             onClick={() => { 
                if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
                onOrder(quantity); 
-               onClose(); 
+               // onClose bu yerda chaqirilmaydi, onOrder bajarilgach ProductCard o'zi yopadi.
             }}
             className="flex-[1.5] py-5 bg-[#4a6d3a] text-white rounded-[1.8rem] font-bold text-lg flex items-center justify-center gap-2 shadow-xl active:scale-95 transition-all"
           >
@@ -107,4 +120,10 @@ export default function OrderModal({ product, onClose, onOrder }: OrderModalProp
       </div>
     </div>
   );
+
+  // Komponent render bo'lmaguncha (hydration) hech narsa qaytarmaydi
+  if (!mounted) return null;
+
+  // Modalni to'g'ridan-to'g'ri document.body ichiga chizish
+  return createPortal(modalContent, document.body);
 }
