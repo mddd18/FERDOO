@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { Sparkles, TrendingDown, Package, CheckCircle2, ChevronRight, Zap } from "lucide-react";
+import { Sparkles, TrendingDown, Package, CheckCircle2, ChevronRight, Zap, X } from "lucide-react";
 import { toast } from "sonner";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 const initialSuggestions = [
- 
   {
     id: 'ai1',
     productName: 'Sarxil Qizil Pomidor',
@@ -62,8 +61,9 @@ const initialSuggestions = [
 export default function AIAgent() {
   const [suggestions, setSuggestions] = useState(initialSuggestions);
 
+  // Qabul qilish funksiyasi
   const handleConfirmOrder = (item: any) => {
-    if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+    if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([30, 50, 30]);
     toast.success("AI Buyurtma joylandi!", {
       description: `${item.suggestedOrder} ${item.unit} ${item.productName} zakaz qilindi.`,
       icon: <Sparkles className="w-5 h-5 text-yellow-400" />
@@ -71,10 +71,19 @@ export default function AIAgent() {
     setSuggestions(suggestions.filter(s => s.id !== item.id));
   };
 
+  // Rad etish funksiyasi
+  const handleReject = (item: any) => {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
+    toast.info("Tavsiya rad etildi", {
+      description: `${item.productName} hozircha olinmaydi.`,
+    });
+    setSuggestions(suggestions.filter(s => s.id !== item.id));
+  };
+
   return (
     <div className="pb-10 animate-fadeIn">
       {/* AI Stats Header */}
-      <div className="bg-[#2d3429] p-6 rounded-3xl relative overflow-hidden shadow-lg mb-8">
+      <div className="bg-[#2d3429] p-6 rounded-3xl relative overflow-hidden shadow-lg mb-8 mt-2">
         <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-[#4a6d3a] rounded-full mix-blend-screen filter blur-[3rem] opacity-60"></div>
         <div className="relative z-10 flex items-center gap-3 mb-4">
           <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shrink-0">
@@ -128,6 +137,7 @@ export default function AIAgent() {
                 <p className="text-[11px] font-semibold text-[#2d5a27] leading-relaxed">{item.reason}</p>
               </div>
 
+              {/* TUGMALAR QISMI */}
               <div className="flex items-center justify-between gap-3 pt-1">
                 <div>
                   <p className="text-[10px] font-bold text-[#a3b19b] mb-0.5 uppercase tracking-wider">Taklif etilgan buyurtma</p>
@@ -135,13 +145,27 @@ export default function AIAgent() {
                     {item.totalPrice.toLocaleString()} <span className="text-[10px] text-[#6b7a62]">so'm</span>
                   </p>
                 </div>
-                <button 
-                  onClick={() => handleConfirmOrder(item)}
-                  className="bg-[#2d3429] hover:bg-black text-white px-6 py-4 rounded-2xl font-bold text-xs flex items-center gap-2 active:scale-95 transition-all shadow-lg shadow-black/10"
-                >
-                  Zakaz <ChevronRight className="w-4 h-4" />
-                </button>
+                
+                <div className="flex items-center gap-2">
+                  {/* RAD ETISH TUGMASI */}
+                  <button 
+                    onClick={() => handleReject(item)}
+                    className="p-4 bg-[#f1f4ee] hover:bg-[#e2f0d9] text-[#6b7a62] rounded-2xl active:scale-90 transition-all border border-black/[0.03]"
+                    aria-label="Rad etish"
+                  >
+                    <X className="w-4 h-4" strokeWidth={2.5} />
+                  </button>
+
+                  {/* QABUL QILISH TUGMASI */}
+                  <button 
+                    onClick={() => handleConfirmOrder(item)}
+                    className="bg-[#2d3429] hover:bg-black text-white px-5 py-3.5 rounded-2xl font-bold text-xs flex items-center gap-1.5 active:scale-95 transition-all shadow-lg shadow-black/10"
+                  >
+                    Zakaz <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
+
             </div>
           ))
         )}
